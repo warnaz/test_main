@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:15
+    container_name: db_for_bot
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: master
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - 5432:5432
+
+  app:
+    build: 
+      context: .
+    container_name: bot_app_name
+    command: ["/bot_app/app.sh"]
+    ports:
+      - 5000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
