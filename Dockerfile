@@ -10,4 +10,6 @@ COPY . .
 
 RUN chmod a+x *.sh
 
-# CMD gunicorn -w 4 -k uvicorn.workers.UvicornWorker starknet.main:app --bind 0.0.0.0:8000 
+RUN alembic upgrade head
+
+CMD gunicorn -w 1 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 
